@@ -19,9 +19,6 @@ CSeahavenWorkArea.cpp \
 CCard.cpp \
 CCardDeck.cpp \
 CCardPlayer.cpp \
-CQUtil.cpp \
-CQImage.cpp \
-CQFont.cpp \
 
 HEADERS += \
 CQSeahaven.h \
@@ -34,9 +31,6 @@ CSeahavenWorkArea.h \
 CCardDeck.h \
 CCard.h \
 CCardPlayer.h \
-CQUtil.h \
-CQImage.h \
-CQFont.h \
 
 FORMS += \
 CQSeahaven.ui
@@ -47,6 +41,7 @@ LIB_DIR     = ../lib
 
 INCLUDEPATH += \
 ../include \
+../../CQUtil/include \
 ../../CImageLib/include \
 ../../CFont/include \
 ../../CConfig/include \
@@ -60,6 +55,7 @@ INCLUDEPATH += \
 
 unix:LIBS += \
 -L$$LIB_DIR \
+-L../../CQUtil/lib \
 -L../../CImageLib/lib \
 -L../../CFont/lib \
 -L../../CConfig/lib \
@@ -69,5 +65,5 @@ unix:LIBS += \
 -L../../CStrUtil/lib \
 -L../../CMath/lib \
 -L../../CUtil/lib \
--lCImageLib -lCFont -lCConfig -lCFile -lCOS -lCRegExp -lCStrUtil \
+-lCQUtil -lCImageLib -lCFont -lCConfig -lCFile -lCOS -lCRegExp -lCStrUtil \
 -ljpeg -ltre
