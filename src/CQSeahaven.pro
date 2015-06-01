@@ -1,8 +1,12 @@
 TEMPLATE = app
 
+QT += widgets
+
 TARGET = CQSeahaven
 
 DEPENDPATH += .
+
+QMAKE_CXXFLAGS += -std=c++11
 
 CONFIG += debug
 
@@ -66,4 +70,4 @@ unix:LIBS += \
 -L../../CMath/lib \
 -L../../CUtil/lib \
 -lCQUtil -lCImageLib -lCFont -lCConfig -lCFile -lCOS -lCRegExp -lCStrUtil \
--ljpeg -ltre
+-ljpeg -ltre -lpng
