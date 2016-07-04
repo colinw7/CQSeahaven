@@ -15,7 +15,7 @@ CCard(CCardDeck *deck, CCardSuit suit, CCardValue value, CCardSide side) :
 
   image_ = CImageMgrInst->createImage(src);
 
-  image_->read(card_face_data[index_].data, card_face_data[index_].len, CFILE_TYPE_IMAGE_GIF);
+  image_->read(card_face_data[index_].data, card_face_data[index_].len);
 }
 
 CCard::

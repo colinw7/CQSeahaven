@@ -1,16 +1,10 @@
+#include <CQApp.h>
 #include <CQSeahaven.h>
-#include <CQImage.h>
-#include <CQFont.h>
-#include <QApplication>
 
 int
 main(int argc, char **argv)
 {
-  QApplication app(argc, argv);
-
-  CQImage::setPrototype();
-
-  CQFontMgrInst->setPrototype();
+  CQApp app(argc, argv);
 
   CQSeahaven seahaven;
 

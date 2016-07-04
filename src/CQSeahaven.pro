@@ -63,11 +63,13 @@ unix:LIBS += \
 -L../../CImageLib/lib \
 -L../../CFont/lib \
 -L../../CConfig/lib \
+-L../../CFileUtil/lib \
 -L../../CFile/lib \
 -L../../COS/lib \
 -L../../CRegExp/lib \
 -L../../CStrUtil/lib \
 -L../../CMath/lib \
 -L../../CUtil/lib \
--lCQUtil -lCImageLib -lCFont -lCConfig -lCFile -lCOS -lCRegExp -lCStrUtil \
+-lCQUtil -lCImageLib -lCFont -lCConfig -lCFileUtil \
+-lCFile -lCOS -lCUtil -lCRegExp -lCStrUtil \
 -ljpeg -ltre -lpng

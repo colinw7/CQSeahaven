@@ -14,8 +14,8 @@ CQSeahaven()
 
   canvas_ = new CQSeahavenCanvas(ui.canvas);
 
-  connect(ui.action_New_Game, SIGNAL(activated(int)), canvas_, SLOT(newGame()));
-  connect(ui.action_Solve, SIGNAL(activated(int)), canvas_, SLOT(solve()));
+  connect(ui.action_New_Game, SIGNAL(triggered()), canvas_, SLOT(newGame()));
+  connect(ui.action_Solve, SIGNAL(triggered()), canvas_, SLOT(solve()));
 
   QVBoxLayout *vlayout = new QVBoxLayout();
 

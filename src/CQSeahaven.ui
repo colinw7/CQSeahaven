@@ -98,7 +98,7 @@
  <connections>
   <connection>
    <sender>action_Quit</sender>
-   <signal>activated(int)</signal>
+   <signal>triggered()</signal>
    <receiver>CQSeahaven</receiver>
    <slot>close()</slot>
    <hints>
