@@ -73,5 +73,5 @@ unix:LIBS += \
 -L../../CMath/lib \
 -L../../CUtil/lib \
 -lCQUtil -lCImageLib -lCFont -lCConfig -lCFileUtil \
--lCFile -lCOS -lCUtil -lCRegExp -lCStrUtil \
+-lCFile -lCMath -lCOS -lCUtil -lCRegExp -lCStrUtil \
 -ljpeg -ltre -lpng
