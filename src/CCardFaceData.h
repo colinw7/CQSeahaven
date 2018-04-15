@@ -1,3 +1,6 @@
+#ifndef CCardFaceData_H
+#define CCardFaceData_H
+
 #include <CCardData.h>
 
 unsigned char c01_data[] = {
@@ -2077,3 +2080,5 @@ card_face_data[] = {
   { s12_data, 811, },
   { s13_data, 805, },
 };
+
+#endif

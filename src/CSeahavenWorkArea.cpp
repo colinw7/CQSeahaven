@@ -11,7 +11,7 @@ CSeahavenWorkAreaMgr::
 CSeahavenWorkAreaMgr()
 {
   for (int i = 0; i < NUM_WORK_AREAS; ++i) {
-    cards_     [i] = NULL;
+    cards_     [i] = nullptr;
     work_areas_[i] = new CSeahavenWorkArea(this, i);
   }
 
@@ -48,10 +48,10 @@ CSeahavenWorkAreaMgr::
 getFreeWorkArea()
 {
   for (int i = 0; i < NUM_WORK_AREAS; ++i)
-    if (cards_[i] == NULL)
+    if (! cards_[i])
       return work_areas_[i];
 
-  return NULL;
+  return nullptr;
 }
 
 void
@@ -59,7 +59,7 @@ CSeahavenWorkAreaMgr::
 getEmptyWorkAreas(std::vector<CSeahavenWorkArea *> &work_areas)
 {
   for (int i = 0; i < NUM_WORK_AREAS; ++i)
-    if (cards_[i] == NULL)
+    if (! cards_[i])
       work_areas.push_back(work_areas_[i]);
 }
 
@@ -68,7 +68,7 @@ CSeahavenWorkAreaMgr::
 clearWorkAreas()
 {
   for (int i = 0; i < NUM_WORK_AREAS; ++i)
-    cards_[i] = NULL;
+    cards_[i] = nullptr;
 
   num_empty_ = NUM_WORK_AREAS;
 }
@@ -81,7 +81,7 @@ getTopCards(int num, std::vector<CSeahavenWorkArea *> &work_areas)
 
   CCard *card = cards_[num];
 
-  if (card == NULL)
+  if (! card)
     return;
 
   bool done[4] = { false, false, false, false };
@@ -91,7 +91,7 @@ getTopCards(int num, std::vector<CSeahavenWorkArea *> &work_areas)
   done[num] = true;
 
   CCard *card1 = card;
-  CCard *card2 = NULL;
+  CCard *card2 = nullptr;
 
   int i = 0;
 
@@ -99,7 +99,7 @@ getTopCards(int num, std::vector<CSeahavenWorkArea *> &work_areas)
     if (done[i])
       goto next;
 
-    if (cards_[i] == NULL) {
+    if (! cards_[i]) {
       done[i] = true;
       goto next;
     }
@@ -137,14 +137,14 @@ isEmpty(int num) const
 {
   assert(num >= 0 && num < NUM_WORK_AREAS);
 
-  return (cards_[num] == NULL);
+  return ! cards_[num];
 }
 
 void
 CSeahavenWorkAreaMgr::
 push(int num, CCard *card)
 {
-  assert(num >= 0 && num < NUM_WORK_AREAS && cards_[num] == NULL);
+  assert(num >= 0 && num < NUM_WORK_AREAS && ! cards_[num]);
 
   cards_[num] = card;
 
@@ -155,11 +155,11 @@ CCard *
 CSeahavenWorkAreaMgr::
 pop(int num)
 {
-  assert(num >= 0 && num < NUM_WORK_AREAS && cards_[num] != NULL);
+  assert(num >= 0 && num < NUM_WORK_AREAS && cards_[num]);
 
   CCard *card = cards_[num];
 
-  cards_[num] = NULL;
+  cards_[num] = nullptr;
 
   ++num_empty_;
 
@@ -170,7 +170,7 @@ CCard *
 CSeahavenWorkAreaMgr::
 peek(int num) const
 {
-  assert(num >= 0 && num < NUM_WORK_AREAS && cards_[num] != NULL);
+  assert(num >= 0 && num < NUM_WORK_AREAS && cards_[num]);
 
   return cards_[num];
 }
@@ -182,7 +182,7 @@ print(std::ostream &os) const
   for (int i = 0; i < NUM_WORK_AREAS; ++i) {
     CStrUtil::fprintf(os, "Work %02d) ", i + 1);
 
-    if (cards_[i] != NULL)
+    if (cards_[i])
       os << *cards_[i];
     else
       os << "---";

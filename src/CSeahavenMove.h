@@ -12,7 +12,8 @@ class CSeahavenPile;
 class CSeahavenMove;
 class CCard;
 
-enum CSeahavenMoveType {
+enum class CSeahavenMoveType {
+  NONE,
   STACK_TO_PILE,
   WORK_AREA_TO_PILE,
   WORK_AREA_TO_STACK,
@@ -20,10 +21,14 @@ enum CSeahavenMoveType {
   STACK_TO_WORK_AREA
 };
 
+//---
+
 class CSeahavenMoveSetCmp {
  public:
   int operator()(CSeahavenMoveSet *a, CSeahavenMoveSet *b);
 };
+
+//---
 
 class CSeahavenMoveSetSet {
   CINST_COUNT_MEMBER(CSeahavenMoveSetSet);
@@ -62,8 +67,10 @@ class CSeahavenMoveSetSet {
 
  private:
   MoveSetList move_sets_;
-  int         num_move_sets_;
+  int         num_move_sets_ { 0 };
 };
+
+//---
 
 class CSeahavenMoveSet {
   CINST_COUNT_MEMBER(CSeahavenMoveSet);
@@ -103,8 +110,10 @@ class CSeahavenMoveSet {
 
  private:
   MoveList moves_;
-  int      num_moves_;
+  int      num_moves_ { 0 };
 };
+
+//---
 
 class CSeahavenMove {
   CINST_COUNT_MEMBER(CSeahavenMove);
@@ -130,11 +139,11 @@ class CSeahavenMove {
   friend std::ostream &operator<<(std::ostream &os, const CSeahavenMove &move);
 
  private:
-  CSeahavenMoveType   type_;
-  CSeahavenStack     *stack1_;
-  CSeahavenStack     *stack2_;
-  CSeahavenWorkArea  *work_area_;
-  CSeahavenPile      *pile_;
+  CSeahavenMoveType  type_      { CSeahavenMoveType::NONE };
+  CSeahavenStack*    stack1_    { nullptr };
+  CSeahavenStack*    stack2_    { nullptr };
+  CSeahavenWorkArea* work_area_ { nullptr };
+  CSeahavenPile*     pile_      { nullptr };
 };
 
 #endif

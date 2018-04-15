@@ -25,8 +25,10 @@ class CSeahavenHistory {
   bool doTidy(CSeahavenMove *move);
 
  private:
-  CSeahaven                    *seahaven_;
-  std::vector<CSeahavenMove *>  moves_;
+  using Moves = std::vector<CSeahavenMove *>;
+
+  CSeahaven* seahaven_ { nullptr };
+  Moves      moves_;
 };
 
 #endif

@@ -12,6 +12,7 @@
 #include <CEvent.h>
 #include <CQUtil.h>
 
+#include <QApplication>
 #include <QPainter>
 #include <QMouseEvent>
 
@@ -84,6 +85,8 @@ solve()
         move_set->execute();
 
         update();
+
+        qApp->processEvents();
 
         COSTimer::msleep(100);
       }

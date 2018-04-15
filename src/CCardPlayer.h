@@ -1,5 +1,5 @@
-#ifndef CCARD_PLAYER_H
-#define CCARD_PLAYER_H
+#ifndef CCardPlayer_H
+#define CCardPlayer_H
 
 #include <CInstCount.h>
 #include <string>
@@ -12,10 +12,10 @@ class CCardPlayer {
 
  public:
   CCardPlayer(const std::string &name);
- ~CCardPlayer();
 
-  void addCard(CCard *card);
+  virtual ~CCardPlayer();
 
+  void addCard   (CCard *card);
   void removeCard(CCard *card);
 
   int getNumCards() const;

@@ -19,21 +19,7 @@ static char suit_chars[] = "CDHS";
 CCardDeck::
 CCardDeck()
 {
-  CImageNameSrc src("CCardDeck/back");
-
-  back_image_ = CImageMgrInst->createImage(src);
-
-  back_image_->read(card_back_data.data, card_back_data.len);
-
-  for (int i = 0; i < NUM_CARDS; i++) {
-    CCard *card = new CCard(this,
-                            (CCard::CCardSuit ) (i / 13),
-                            (CCard::CCardValue) (i % 13));
-
-    cards_on_.push_back(card);
-  }
-
-  shuffle();
+  init();
 }
 
 CCardDeck::
@@ -44,20 +30,61 @@ CCardDeck::
 
 void
 CCardDeck::
+init() const
+{
+  if (! initialized_) {
+    CCardDeck *th = const_cast<CCardDeck *>(this);
+
+    th->initialized_ = true;
+
+    for (int i = 0; i < NUM_CARDS; i++) {
+      CCard::Suit  suit  = (CCard::Suit ) (i / 13);
+      CCard::Value value = (CCard::Value) (i % 13);
+
+      CCard *card = th->createCard(suit, value);
+
+      th->cards_on_.push_back(card);
+    }
+
+    th->shuffle();
+  }
+}
+
+CCard *
+CCardDeck::
+createCard(CCard::Suit suit, CCard::Value value)
+{
+  return new CCard(this, suit, value);
+}
+
+CImagePtr
+CCardDeck::
+getBackImage() const
+{
+  if (! backImage_.isValid()) {
+    CCardDeck *th = const_cast<CCardDeck *>(this);
+
+    CImageNameSrc src("CCardDeck/back");
+
+    th->backImage_ = CImageMgrInst->createImage(src);
+
+    th->backImage_->read(card_back_data.data, card_back_data.len);
+  }
+
+  return backImage_;
+}
+
+void
+CCardDeck::
 deleteCards()
 {
-  int num_cards_on = cards_on_.size();
-
-  for (int i = 0; i < num_cards_on; i++)
-    delete cards_on_[i];
+  for (auto &card : cards_on_)
+    delete card;
 
   cards_on_.clear();
 
-  CCardOffList::iterator pcard1 = cards_off_.begin();
-  CCardOffList::iterator pcard2 = cards_off_.end  ();
-
-  for ( ; pcard1 != pcard2; ++pcard1)
-    delete *pcard1;
+  for (auto &card : cards_off_)
+    delete card;
 
   cards_off_.clear();
 }
@@ -66,13 +93,13 @@ void
 CCardDeck::
 save(CFile &file)
 {
-  int num_cards_on = cards_on_.size();
+  init();
 
-  for (int i = 0; i < num_cards_on; i++) {
-    int suit  = cards_on_[i]->getSuit ();
-    int value = cards_on_[i]->getValue();
+  for (const auto &card : cards_on_) {
+    CCard::Suit  suit  = card->getSuit ();
+    CCard::Value value = card->getValue();
 
-    file.printf("%c%02d\n", suit_chars[suit], value + 1);
+    file.printf("%c%02d\n", suit_chars[int(suit)], int(value) + 1);
   }
 }
 
@@ -80,6 +107,8 @@ void
 CCardDeck::
 restore(CFile &file)
 {
+  init();
+
   deleteCards();
 
   std::string line;
@@ -97,18 +126,19 @@ restore(CFile &file)
     if (! CStrUtil::isInteger(value_str))
       throw "Bad CCardDeck File";
 
-    int suit  = (strchr(suit_chars, suit_char) - suit_chars);
-    int value = CStrUtil::toInteger(value_str) - 1;
+    int isuit  = (strchr(suit_chars, suit_char) - suit_chars);
+    int ivalue = CStrUtil::toInteger(value_str) - 1;
 
-    if (suit < 0 || suit > 4)
+    if (isuit < 0 || isuit > 4)
       throw "Bad CCardDeck File";
 
-    if (value < 0 || value > 13)
+    if (ivalue < 0 || ivalue > 13)
       throw "Bad CCardDeck File";
 
-    CCard *card = new CCard(this,
-                          (CCard::CCardSuit ) suit,
-                          (CCard::CCardValue) value);
+    CCard::Suit  suit  = (CCard::Suit ) isuit;
+    CCard::Value value = (CCard::Value) ivalue;
+
+    CCard *card = createCard(suit, value);
 
     cards_on_.push_back(card);
   }
@@ -118,6 +148,8 @@ void
 CCardDeck::
 shuffle()
 {
+  init();
+
   undealAll();
 
   COSRand::srand();
@@ -137,11 +169,10 @@ void
 CCardDeck::
 undealAll()
 {
-  CCardOffList::const_iterator pcard1 = cards_off_.begin();
-  CCardOffList::const_iterator pcard2 = cards_off_.end  ();
+  init();
 
-  for ( ; pcard1 != pcard2; ++pcard1)
-    cards_on_.push_back(*pcard1);
+  for (auto &card : cards_off_)
+    cards_on_.push_back(card);
 
   cards_off_.clear();
 }
@@ -150,9 +181,9 @@ void
 CCardDeck::
 dealAll()
 {
-  int num_cards_on = cards_on_.size();
+  init();
 
-  for (int i = 0; i < num_cards_on; i++)
+  for (std::size_t i = 0; i < cards_on_.size(); i++)
     popCard();
 }
 
@@ -160,7 +191,9 @@ CCard *
 CCardDeck::
 popCard()
 {
-  CCard *card = cards_on_[cards_on_.size() - 1];
+  init();
+
+  CCard *card = peekCard();
 
   cards_on_.pop_back();
 
@@ -173,6 +206,8 @@ CCard *
 CCardDeck::
 peekCard() const
 {
+  init();
+
   return cards_on_[cards_on_.size() - 1];
 }
 
@@ -180,8 +215,10 @@ CCard *
 CCardDeck::
 peekCard(int pos) const
 {
+  init();
+
   if (pos < 0 || pos >= (int) cards_on_.size())
-    return NULL;
+    return nullptr;
 
   return cards_on_[pos];
 }
@@ -190,6 +227,8 @@ void
 CCardDeck::
 pushCard(CCard *card)
 {
+  init();
+
   cards_off_.remove(card);
 
   cards_on_.push_back(card);
@@ -197,22 +236,21 @@ pushCard(CCard *card)
 
 CCard *
 CCardDeck::
-undealCard(CCard::CCardSuit suit, CCard::CCardValue value)
+undealCard(CCard::Suit suit, CCard::Value value)
 {
-  CCardOffList::iterator pcard1 = cards_off_.begin();
-  CCardOffList::iterator pcard2 = cards_off_.end  ();
+  init();
 
-  for ( ; pcard1 != pcard2; ++pcard1) {
-    if (suit == (*pcard1)->getSuit() && value == (*pcard1)->getValue()) {
-      cards_on_.push_back(*pcard1);
+  for (auto &card : cards_off_) {
+    if (suit == card->getSuit() && value == card->getValue()) {
+      cards_on_.push_back(card);
 
-      cards_off_.remove(*pcard1);
+      cards_off_.remove(card);
 
-      return *pcard1;
+      return card;
     }
   }
 
-  return NULL;
+  return nullptr;
 }
 
 int

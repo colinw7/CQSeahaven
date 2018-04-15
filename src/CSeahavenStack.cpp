@@ -134,7 +134,7 @@ CSeahavenStack::
 getTopCard() const
 {
   if (num_cards_ == 0)
-    return NULL;
+    return nullptr;
 
   return cards_[num_cards_ - num_consecutive_];
 }
@@ -229,11 +229,8 @@ void
 CSeahavenStack::
 print(std::ostream &os) const
 {
-  CardList::const_iterator pcard1 = cards_.begin();
-  CardList::const_iterator pcard2 = cards_.end  ();
-
-  for ( ; pcard1 != pcard2; ++pcard1)
-    os << **pcard1 << " ";
+  for (auto &card : cards_)
+    os << *card << " ";
 }
 
 std::ostream &

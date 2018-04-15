@@ -27,12 +27,12 @@ class CSeahavenState {
   friend int operator==(const CSeahavenState &lhs, const CSeahavenState &rhs);
 
  private:
-  char c_[220];
-  int  key_;
+  char c_[220];    // 10x22
+  int  key_ { 0 };
 };
 
 class CSeahaven {
-  typedef std::vector<CSeahavenState *> StateList;
+  using StateList = std::vector<CSeahavenState *>;
 
   CINST_COUNT_MEMBER(CSeahaven);
 
@@ -126,16 +126,19 @@ class CSeahaven {
  private:
   static bool debug_;
 
-  CCardDeck            *deck_;
-  CSeahavenStackMgr    *stack_mgr_;
-  int                   num_stacks_;
-  CSeahavenPileMgr     *pile_mgr_;
-  int                   num_piles_;
-  CSeahavenWorkAreaMgr *work_area_mgr_;
-  int                   num_work_areas_;
-  int                   iterations_;
-  StateList             states_[NUM_STATE_LISTS];
-  int                   num_states_[NUM_STATE_LISTS];
+  using StateListList = std::vector<StateList>;
+  using NumStates     = std::vector<int>;
+
+  CCardDeck            *deck_           { nullptr };
+  CSeahavenStackMgr    *stack_mgr_      { nullptr };
+  int                   num_stacks_     { 0 };
+  CSeahavenPileMgr     *pile_mgr_       { nullptr };
+  int                   num_piles_      { 0 };
+  CSeahavenWorkAreaMgr *work_area_mgr_  { nullptr };
+  int                   num_work_areas_ { 0 };
+  int                   iterations_     { 0 };
+  StateListList         states_;
+  NumStates             num_states_;
 };
 
 #endif

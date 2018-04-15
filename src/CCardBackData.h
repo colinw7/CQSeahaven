@@ -1,3 +1,6 @@
+#ifndef CCardBackData_H
+#define CCardBackData_H
+
 #include <CCardData.h>
 
 unsigned char back_data[] = {
@@ -25,3 +28,5 @@ unsigned char back_data[] = {
 };
 
 static CCardData card_back_data = { back_data, 325 };
+
+#endif

@@ -15,8 +15,10 @@ operator()(CSeahavenMoveSet *a, CSeahavenMoveSet *b)
   return (a->getType() < b->getType());
 }
 
+//---
+
 CSeahavenMoveSetSet::
-CSeahavenMoveSetSet() : num_move_sets_(0)
+CSeahavenMoveSetSet()
 {
 }
 
@@ -30,11 +32,8 @@ void
 CSeahavenMoveSetSet::
 delete_all()
 {
-  MoveSetList::iterator pmove_set1 = move_sets_.begin();
-  MoveSetList::iterator pmove_set2 = move_sets_.end  ();
-
-  for ( ; pmove_set1 != pmove_set2; ++pmove_set1)
-    delete *pmove_set1;
+  for (auto &move_set : move_sets_)
+    delete move_set;
 }
 
 CSeahavenMoveSet *
@@ -76,30 +75,24 @@ void
 CSeahavenMoveSetSet::
 addMoveSetSet(CSeahavenMoveSetSet &move_set_set)
 {
-  MoveSetList::iterator pmove_set1 = move_set_set.move_sets_.begin();
-  MoveSetList::iterator pmove_set2 = move_set_set.move_sets_.end  ();
-
-  for ( ; pmove_set1 != pmove_set2; ++pmove_set1)
-    addMoveSet(**pmove_set1);
+  for (auto &move_set : move_set_set.move_sets_)
+    addMoveSet(*move_set);
 }
 
 void
 CSeahavenMoveSetSet::
 execute()
 {
-  MoveSetList::iterator pmove_set1 = move_sets_.begin();
-  MoveSetList::iterator pmove_set2 = move_sets_.end  ();
-
-  for ( ; pmove_set1 != pmove_set2; ++pmove_set1)
-    (*pmove_set1)->execute();
+  for (auto &move_set : move_sets_)
+    move_set->execute();
 }
 
 void
 CSeahavenMoveSetSet::
 undo()
 {
-  MoveSetList::reverse_iterator pmove_set1 = move_sets_.rbegin();
-  MoveSetList::reverse_iterator pmove_set2 = move_sets_.rend  ();
+  auto pmove_set1 = move_sets_.rbegin();
+  auto pmove_set2 = move_sets_.rend  ();
 
   for ( ; pmove_set1 != pmove_set2; ++pmove_set1)
     (*pmove_set1)->undo();
@@ -123,11 +116,8 @@ void
 CSeahavenMoveSetSet::
 print(std::ostream &os) const
 {
-  MoveSetList::const_iterator pmove_set1 = move_sets_.begin();
-  MoveSetList::const_iterator pmove_set2 = move_sets_.end  ();
-
-  for ( ; pmove_set1 != pmove_set2; ++pmove_set1)
-    os << **pmove_set1 << std::endl;
+  for (auto &move_set : move_sets_)
+    os << *move_set << std::endl;
 }
 
 std::ostream &
@@ -138,19 +128,18 @@ operator<<(std::ostream &os, const CSeahavenMoveSetSet &move_set_set)
   return os;
 }
 
+//------
+
 CSeahavenMoveSet::
-CSeahavenMoveSet() : num_moves_(0)
+CSeahavenMoveSet()
 {
 }
 
 CSeahavenMoveSet::
 CSeahavenMoveSet(const CSeahavenMoveSet &move_set) : num_moves_(0)
 {
-  MoveList::const_iterator pmove1 = move_set.moves_.begin();
-  MoveList::const_iterator pmove2 = move_set.moves_.end  ();
-
-  for ( ; pmove1 != pmove2; ++pmove1) {
-    moves_.push_back(new CSeahavenMove(**pmove1));
+  for (auto &move : move_set.moves_) {
+    moves_.push_back(new CSeahavenMove(*move));
 
     ++num_moves_;
   }
@@ -177,11 +166,8 @@ void
 CSeahavenMoveSet::
 delete_all()
 {
-  MoveList::iterator pmove1 = moves_.begin();
-  MoveList::iterator pmove2 = moves_.end  ();
-
-  for ( ; pmove1 != pmove2; ++pmove1)
-    delete *pmove1;
+  for (auto &move : moves_)
+    delete move;
 }
 
 CSeahavenMoveType
@@ -191,7 +177,7 @@ getType() const
   if (num_moves_ > 0)
     return moves_[0]->getType();
   else
-    return STACK_TO_STACK;
+    return CSeahavenMoveType::STACK_TO_STACK;
 }
 
 void
@@ -253,11 +239,8 @@ void
 CSeahavenMoveSet::
 addMoveSet(CSeahavenMoveSet &move_set)
 {
-  MoveList::iterator pmove1 = move_set.moves_.begin();
-  MoveList::iterator pmove2 = move_set.moves_.end  ();
-
-  for ( ; pmove1 != pmove2; ++pmove1) {
-    moves_.push_back(*pmove1);
+  for (auto &move : move_set.moves_) {
+    moves_.push_back(move);
 
     ++num_moves_;
   }
@@ -281,19 +264,16 @@ void
 CSeahavenMoveSet::
 execute()
 {
-  MoveList::const_iterator pmove1 = moves_.begin();
-  MoveList::const_iterator pmove2 = moves_.end  ();
-
-  for ( ; pmove1 != pmove2; ++pmove1)
-    (*pmove1)->execute();
+  for (auto &move : moves_)
+    move->execute();
 }
 
 void
 CSeahavenMoveSet::
 undo()
 {
-  MoveList::const_reverse_iterator pmove1 = moves_.rbegin();
-  MoveList::const_reverse_iterator pmove2 = moves_.rend  ();
+  auto pmove1 = moves_.rbegin();
+  auto pmove2 = moves_.rend  ();
 
   for ( ; pmove1 != pmove2; ++pmove1)
     (*pmove1)->undo();
@@ -303,11 +283,8 @@ void
 CSeahavenMoveSet::
 print(std::ostream &os) const
 {
-  MoveList::const_iterator pmove1 = moves_.begin();
-  MoveList::const_iterator pmove2 = moves_.end  ();
-
-  for ( ; pmove1 != pmove2; ++pmove1)
-    os << **pmove1 << " ";
+  for (auto &move : moves_)
+    os << *move << " ";
 }
 
 std::ostream &
@@ -318,6 +295,8 @@ operator<<(std::ostream &os, const CSeahavenMoveSet &move_set)
   return os;
 }
 
+//---
+
 CSeahavenMove::
 CSeahavenMove(const CSeahavenMove &move) :
  type_(move.type_), stack1_(move.stack1_), stack2_(move.stack2_),
@@ -327,36 +306,31 @@ CSeahavenMove(const CSeahavenMove &move) :
 
 CSeahavenMove::
 CSeahavenMove(CSeahavenStack *stack1, CSeahavenStack *stack2) :
- type_(STACK_TO_STACK), stack1_(stack1), stack2_(stack2),
- work_area_(NULL), pile_(NULL)
+ type_(CSeahavenMoveType::STACK_TO_STACK), stack1_(stack1), stack2_(stack2)
 {
 }
 
 CSeahavenMove::
 CSeahavenMove(CSeahavenStack *stack, CSeahavenWorkArea *work_area) :
- type_(STACK_TO_WORK_AREA), stack1_(stack), stack2_(NULL),
- work_area_(work_area), pile_(NULL)
+ type_(CSeahavenMoveType::STACK_TO_WORK_AREA), stack1_(stack), work_area_(work_area)
 {
 }
 
 CSeahavenMove::
 CSeahavenMove(CSeahavenStack *stack, CSeahavenPile *pile) :
- type_(STACK_TO_PILE), stack1_(stack), stack2_(NULL),
- work_area_(NULL), pile_(pile)
+ type_(CSeahavenMoveType::STACK_TO_PILE), stack1_(stack), pile_(pile)
 {
 }
 
 CSeahavenMove::
 CSeahavenMove(CSeahavenWorkArea *work_area, CSeahavenStack *stack) :
- type_(WORK_AREA_TO_STACK), stack1_(stack), stack2_(NULL),
- work_area_(work_area), pile_(NULL)
+ type_(CSeahavenMoveType::WORK_AREA_TO_STACK), stack1_(stack), work_area_(work_area)
 {
 }
 
 CSeahavenMove::
 CSeahavenMove(CSeahavenWorkArea *work_area, CSeahavenPile *pile) :
- type_(WORK_AREA_TO_PILE), stack1_(NULL), stack2_(NULL),
- work_area_(work_area), pile_(pile)
+ type_(CSeahavenMoveType::WORK_AREA_TO_PILE), work_area_(work_area), pile_(pile)
 {
 }
 
@@ -364,26 +338,27 @@ bool
 CSeahavenMove::
 isToPileMove() const
 {
-  return (type_ == STACK_TO_PILE || type_ == WORK_AREA_TO_PILE);
+  return (type_ == CSeahavenMoveType::STACK_TO_PILE ||
+          type_ == CSeahavenMoveType::WORK_AREA_TO_PILE);
 }
 
 void
 CSeahavenMove::
 execute()
 {
-  if      (type_ == STACK_TO_STACK) {
+  if      (type_ == CSeahavenMoveType::STACK_TO_STACK) {
     stack2_->push(stack1_->pop());
   }
-  else if (type_ == STACK_TO_WORK_AREA) {
+  else if (type_ == CSeahavenMoveType::STACK_TO_WORK_AREA) {
     work_area_->push(stack1_->pop());
   }
-  else if (type_ == STACK_TO_PILE) {
+  else if (type_ == CSeahavenMoveType::STACK_TO_PILE) {
     pile_->push(stack1_->pop());
   }
-  else if (type_ == WORK_AREA_TO_STACK) {
+  else if (type_ == CSeahavenMoveType::WORK_AREA_TO_STACK) {
     stack1_->push(work_area_->pop());
   }
-  else if (type_ == WORK_AREA_TO_PILE) {
+  else if (type_ == CSeahavenMoveType::WORK_AREA_TO_PILE) {
     pile_->push(work_area_->pop());
   }
 }
@@ -392,19 +367,19 @@ void
 CSeahavenMove::
 undo()
 {
-  if      (type_ == STACK_TO_STACK) {
+  if      (type_ == CSeahavenMoveType::STACK_TO_STACK) {
     stack1_->push(stack2_->pop());
   }
-  else if (type_ == STACK_TO_WORK_AREA) {
+  else if (type_ == CSeahavenMoveType::STACK_TO_WORK_AREA) {
     stack1_->push(work_area_->pop());
   }
-  else if (type_ == STACK_TO_PILE) {
+  else if (type_ == CSeahavenMoveType::STACK_TO_PILE) {
     stack1_->push(pile_->pop());
   }
-  else if (type_ == WORK_AREA_TO_STACK) {
+  else if (type_ == CSeahavenMoveType::WORK_AREA_TO_STACK) {
     work_area_->push(stack1_->pop());
   }
-  else if (type_ == WORK_AREA_TO_PILE) {
+  else if (type_ == CSeahavenMoveType::WORK_AREA_TO_PILE) {
     work_area_->push(pile_->pop());
   }
 }
@@ -413,23 +388,23 @@ void
 CSeahavenMove::
 print(std::ostream &os) const
 {
-  if      (type_ == STACK_TO_STACK) {
+  if      (type_ == CSeahavenMoveType::STACK_TO_STACK) {
     os << "Stack " << (stack1_->getNum() + 1) << " to ";
     os << "Stack " << (stack2_->getNum() + 1);
   }
-  else if (type_ == STACK_TO_WORK_AREA) {
+  else if (type_ == CSeahavenMoveType::STACK_TO_WORK_AREA) {
     os << "Stack "     << (stack1_   ->getNum() + 1) << " to ";
     os << "Work Area " << (work_area_->getNum() + 1);
   }
-  else if (type_ == STACK_TO_PILE) {
+  else if (type_ == CSeahavenMoveType::STACK_TO_PILE) {
     os << "Stack " << (stack1_->getNum() + 1) << " to ";
     os << "Pile";
   }
-  else if (type_ == WORK_AREA_TO_STACK) {
+  else if (type_ == CSeahavenMoveType::WORK_AREA_TO_STACK) {
     os << "Work Area " << (work_area_->getNum() + 1) << " to ";
     os << "Stack "     << (stack1_   ->getNum() + 1);
   }
-  else if (type_ == WORK_AREA_TO_PILE) {
+  else if (type_ == CSeahavenMoveType::WORK_AREA_TO_PILE) {
     os << "Work Area " << (work_area_->getNum() + 1) << " to ";
     os << "Pile";
   }

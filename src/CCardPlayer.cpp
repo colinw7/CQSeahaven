@@ -37,16 +37,16 @@ CCardPlayer::
 getCard(int pos) const
 {
   if (pos < 0 || pos >= (int) cards_.size())
-    return NULL;
+    return nullptr;
 
-  CCardList::const_iterator pcard1 = cards_.begin();
-  CCardList::const_iterator pcard2 = cards_.end  ();
+  int i = 0;
 
-  for (int i = 0; i < pos && pcard1 != pcard2; i++)
-    ++pcard1;
+  for (const auto &card : cards_) {
+    if (i == pos)
+      return card;
 
-  if (pcard1 == pcard2)
-    return NULL;
+    ++i;
+  }
 
-  return *pcard1;
+  return nullptr;
 }

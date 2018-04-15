@@ -59,33 +59,26 @@ doTidy(CSeahavenMove *move)
 {
   std::vector<CSeahavenStack *> stacks = seahaven_->getStacks();
 
-  std::vector<CSeahavenStack *>::iterator pstack;
-
-  for (pstack = stacks.begin(); pstack != stacks.end(); ++pstack) {
-    Card *card = (*pstack)->peek();
-
-    if (card == NULL)
-      continue;
+  for (auto &stack : stacks) {
+    Card *card = stack->peek();
+    if (! card) continue;
 
     CSeahavenPile *pile = CSeahavenPile::getPile(card->getSuit());
-
-    if (pile == NULL)
-      continue;
+    if (! pile) continue;
 
     Card *pile_card = pile->peek();
 
-    if (pile_card == NULL && ! card->isAce())
+    if (! pile_card && ! card->isAce())
       continue;
 
-    if (pile_card != NULL &&
-        (card->getValue() != pile_card->getValue() + 1))
+    if (pile_card && (card->getValue() != pile_card->getValue() + 1))
       continue;
 
-    CSeahavenMove *sub_move = new CSeahavenMove(*pstack, pile);
+    CSeahavenMove *sub_move = new CSeahavenMove(stack, pile);
 
     move->addSubMove(sub_move);
 
-    card = (*pstack)->pop();
+    card = stack->pop();
 
     pile->push(card);
 
@@ -94,33 +87,26 @@ doTidy(CSeahavenMove *move)
 
   std::vector<CSeahavenWorkArea *> work_areas = seahaven_->getWorkAreas();
 
-  std::vector<CSeahavenWorkArea *>::iterator pwork_area;
-
-  for (pwork_area = work_areas.begin(); pwork_area != work_areas.end(); ++pwork_area) {
-    Card *card = (*pwork_area)->peek();
-
-    if (card == NULL)
-      continue;
+  for (auto &work_area : work_areas) {
+    Card *card = work_area->peek();
+    if (! card) continue;
 
     CSeahavenPile *pile = CSeahavenPile::getPile(card->getSuit());
-
-    if (pile == NULL)
-      continue;
+    if (! pile) continue;
 
     Card *pile_card = pile->peek();
 
-    if (pile_card == NULL && ! card->isAce())
+    if (! pile_card && ! card->isAce())
       continue;
 
-    if (pile_card != NULL &&
-        (card->getValue() != pile_card->getValue() + 1))
+    if (pile_card && (card->getValue() != pile_card->getValue() + 1))
       continue;
 
-    CSeahavenMove *sub_move = new CSeahavenMove(*pwork_area, pile);
+    CSeahavenMove *sub_move = new CSeahavenMove(work_area, pile);
 
     move->addSubMove(sub_move);
 
-    card = (*pwork_area)->pop();
+    card = work_area->pop();
 
     pile->push(card);
 

@@ -7,10 +7,10 @@
 CSeahavenPileMgr::
 CSeahavenPileMgr()
 {
-  piles_[CCard::Clubs   ] = new CSeahavenPile(CCard::Clubs   );
-  piles_[CCard::Diamonds] = new CSeahavenPile(CCard::Diamonds);
-  piles_[CCard::Hearts  ] = new CSeahavenPile(CCard::Hearts  );
-  piles_[CCard::Spades  ] = new CSeahavenPile(CCard::Spades  );
+  piles_[int(CCard::Suit::Clubs   )] = new CSeahavenPile(CCard::Suit::Clubs   );
+  piles_[int(CCard::Suit::Diamonds)] = new CSeahavenPile(CCard::Suit::Diamonds);
+  piles_[int(CCard::Suit::Hearts  )] = new CSeahavenPile(CCard::Suit::Hearts  );
+  piles_[int(CCard::Suit::Spades  )] = new CSeahavenPile(CCard::Suit::Spades  );
 }
 
 CSeahavenPileMgr::
@@ -22,9 +22,9 @@ CSeahavenPileMgr::
 
 CSeahavenPile *
 CSeahavenPileMgr::
-getPile(CCard::CCardSuit suit)
+getPile(CCard::Suit suit)
 {
-  return piles_[suit];
+  return piles_[int(suit)];
 }
 
 CSeahavenPile *
@@ -75,7 +75,7 @@ operator<<(std::ostream &os, const CSeahavenPileMgr &pile_mgr)
 }
 
 CSeahavenPile::
-CSeahavenPile(CCard::CCardSuit suit) :
+CSeahavenPile(CCard::Suit suit) :
  suit_(suit), num_cards_(0)
 {
 }
@@ -146,11 +146,8 @@ void
 CSeahavenPile::
 print(std::ostream &os) const
 {
-  CardList::const_iterator pcard1 = cards_.begin();
-  CardList::const_iterator pcard2 = cards_.end  ();
-
-  for ( ; pcard1 != pcard2; ++pcard1)
-    os << **pcard1 << " ";
+  for (auto &card : cards_)
+    os << *card << " ";
 }
 
 std::ostream &

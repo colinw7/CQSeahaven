@@ -21,7 +21,7 @@ class CSeahavenPileMgr {
 
   int getNumPiles() const { return NUM_PILES; }
 
-  CSeahavenPile *getPile(CCard::CCardSuit suit);
+  CSeahavenPile *getPile(CCard::Suit suit);
   CSeahavenPile *getPile(int num);
 
   void clearPiles();
@@ -37,10 +37,10 @@ class CSeahavenPile {
   CINST_COUNT_MEMBER(CSeahavenPile);
 
  public:
-  CSeahavenPile(CCard::CCardSuit suit);
+  CSeahavenPile(CCard::Suit suit);
  ~CSeahavenPile();
 
-  CCard::CCardSuit getSuit() const { return suit_; }
+  CCard::Suit getSuit() const { return suit_; }
 
   bool isEmpty() const { return (num_cards_ == 0); }
 
@@ -62,10 +62,10 @@ class CSeahavenPile {
  private:
   typedef std::vector<CCard *> CardList;
 
-  CCard::CCardSuit suit_;
-  CardList         cards_;
-  int              num_cards_;
-  bool             solved_;
+  CCard::Suit suit_;
+  CardList    cards_;
+  int         num_cards_ { 0 };
+  bool        solved_ { false };
 };
 
 #endif

@@ -28,7 +28,11 @@ CSeahaven()
   work_area_mgr_  = new CSeahavenWorkAreaMgr();
   num_work_areas_ = work_area_mgr_->getNumWorkAreas();
 
-  memset(num_states_, 0, sizeof(num_states_));
+  states_    .resize(NUM_STATE_LISTS);
+  num_states_.resize(NUM_STATE_LISTS);
+
+  for (int i = 0; i < NUM_STATE_LISTS; ++i)
+    num_states_[i] =  0;
 
   deal();
 }
@@ -86,7 +90,7 @@ deal()
     for (int j = 0; j < num_stack_cards; ++j) {
       CCard *card = deck_->popCard();
 
-      card->setSide(CCard::FaceUp);
+      card->setSide(CCard::Side::FaceUp);
 
       stack->push(card);
     }
@@ -99,7 +103,7 @@ deal()
 
     CCard *card = deck_->popCard();
 
-    card->setSide(CCard::FaceUp);
+    card->setSide(CCard::Side::FaceUp);
 
     work_area->push(card);
   }
@@ -170,7 +174,7 @@ solve1(CSeahavenMoveSetSet &move_set_set, int depth)
   //-----
 
   CSeahavenMoveSet move_set;
-  bool    unsolvable;
+  bool             unsolvable;
   CSeahavenMoveSet undo_move_set;
 
   while (getForcedStackMoveSet(move_set, unsolvable)) {
@@ -503,7 +507,7 @@ getForcedPileMoveSet(CSeahavenMoveSet &move_set)
   for (int i = 0; i < num_work_areas_; ++i) {
     CCard *work_area_card = work_area_mgr_->getCard(i);
 
-    if (work_area_card == NULL)
+    if (! work_area_card)
       continue;
 
     CSeahavenWorkArea *work_area = work_area_mgr_->getWorkArea(i);
@@ -991,10 +995,7 @@ save(CFile &file)
       if (j > 0)
         file.printf(" ");
 
-      char suit  = card->getSuitChar();
-      int  value = card->getValue   ();
-
-      file.printf("%c%02d", suit, value + 1);
+      file.printf("%s", card->getName().c_str());
     }
 
     file.printf("\n");
@@ -1011,10 +1012,7 @@ save(CFile &file)
       if (j > 0)
         file.printf(" ");
 
-      char suit  = card->getSuitChar();
-      int  value = card->getValue   ();
-
-      file.printf("%c%02d", suit, value + 1);
+      file.printf("%s", card->getName().c_str());
     }
 
     file.printf("\n");
@@ -1026,12 +1024,8 @@ save(CFile &file)
     if (i > 0)
       file.printf(" ");
 
-    if (card != NULL) {
-      char suit  = card->getSuitChar();
-      int  value = card->getValue   ();
-
-      file.printf("%c%02d", suit, value + 1);
-    }
+    if (card)
+      file.printf("%s", card->getName().c_str());
     else
       file.printf("---");
   }
@@ -1070,14 +1064,14 @@ restore(CFile &file)
       char        suit_char = words[j][0];
       std::string value_str = words[j].substr(1);
 
-      CCard::CCardSuit suit = CCard::charToSuit(suit_char);
+      CCard::Suit suit = CCard::charToSuit(suit_char);
 
       if (! CStrUtil::isInteger(value_str))
         throw "Bad File";
 
       int value = CStrUtil::toInteger(value_str);
 
-      CCard *card = deck_->undealCard(suit, (CCard::CCardValue) (value - 1));
+      CCard *card = deck_->undealCard(suit, (CCard::Value) (value - 1));
 
       stack->push(card);
     }
@@ -1102,14 +1096,14 @@ restore(CFile &file)
       char        suit_char = words[j][0];
       std::string value_str = words[j].substr(1);
 
-      CCard::CCardSuit suit = CCard::charToSuit(suit_char);
+      CCard::Suit suit = CCard::charToSuit(suit_char);
 
       if (! CStrUtil::isInteger(value_str))
         throw "Bad File";
 
       int value = CStrUtil::toInteger(value_str);
 
-      CCard *card = deck_->undealCard(suit, (CCard::CCardValue) (value - 1));
+      CCard *card = deck_->undealCard(suit, (CCard::Value) (value - 1));
 
       pile->push(card);
     }
@@ -1137,14 +1131,14 @@ restore(CFile &file)
       char        suit_char = words[i][0];
       std::string value_str = words[i].substr(1);
 
-      CCard::CCardSuit suit = CCard::charToSuit(suit_char);
+      CCard::Suit suit = CCard::charToSuit(suit_char);
 
       if (! CStrUtil::isInteger(value_str))
         throw "Bad File";
 
       int value = CStrUtil::toInteger(value_str);
 
-      CCard *card = deck_->undealCard(suit, (CCard::CCardValue) (value - 1));
+      CCard *card = deck_->undealCard(suit, (CCard::Value) (value - 1));
 
       work_area->push(card);
     }
@@ -1196,8 +1190,6 @@ operator<<(std::ostream &os, const CSeahaven &seahaven)
 CSeahavenState::
 CSeahavenState(CSeahavenStackMgr *stack_mgr, int num_stacks)
 {
-  key_ = 0;
-
   int k = 0;
 
   memset(c_, 0, sizeof(c_));
