@@ -110,7 +110,7 @@ class CCard {
   static char suitToChar(Suit suit);
   static Suit charToSuit(char c);
 
- private:
+ protected:
   CCardDeck* deck_     { nullptr };
   Suit       suit_     { Suit::None };
   Value      value_    { Value::None };

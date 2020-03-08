@@ -560,12 +560,12 @@ stacksLockEachOther(CSeahavenStack *stack1, CSeahavenStack *stack2)
   CCard *card1 = stack1->peek(-1);
 
   for (int i = 0; i < num_non_consecutive2; ++i) {
-    CCard *card2 = stack2->peek(i);
+    CCard *card3 = stack2->peek(i);
 
-    if (! card2->isSameSuit(card1))
+    if (! card3->isSameSuit(card1))
       continue;
 
-    if (card2->isLowerValue(card1))
+    if (card3->isLowerValue(card1))
       return true;
   }
 
@@ -702,8 +702,8 @@ getWorkToStackMoves(CSeahavenMoveSetSet &move_set_set)
 
     CCard *work_area_card = work_areas[0]->peek();
 
-    for (int i = 0; i < num_stacks_; ++i) {
-      CSeahavenStack *stack = stack_mgr_->getStack(i);
+    for (int ii = 0; ii < num_stacks_; ++ii) {
+      CSeahavenStack *stack = stack_mgr_->getStack(ii);
 
       if (stack->isEmpty()) {
         if (work_area_card->isKing()) {

@@ -10,6 +10,7 @@
 #include <CCardDeck.h>
 #include <COSTimer.h>
 #include <CEvent.h>
+#include <CQImageUtil.h>
 #include <CQUtil.h>
 
 #include <QApplication>
@@ -227,7 +228,7 @@ drawCard(CCard *card, int x, int y)
     card_images_[ind]->convertToRGB();
   }
 
-  painter_->drawImage(QPoint(x, y), CQUtil::toQImage(card_images_[ind]));
+  painter_->drawImage(QPoint(x, y), CQImageUtil::toQImage(card_images_[ind]));
 }
 
 void
@@ -492,7 +493,7 @@ drawDragCards(QPainter *painter)
   for (int i = num_cards - 1; i >= 0; --i) {
     int ind = drag_cards_[i]->getIndex();
 
-    painter->drawImage(QPoint(0, y), CQUtil::toQImage(card_images_[ind]));
+    painter->drawImage(QPoint(0, y), CQImageUtil::toQImage(card_images_[ind]));
 
     y += card_dy_;
   }

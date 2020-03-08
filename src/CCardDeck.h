@@ -4,6 +4,7 @@
 #include <CFile.h>
 #include <CCard.h>
 #include <CInstCount.h>
+#include <map>
 
 class CCard;
 
@@ -41,21 +42,23 @@ class CCardDeck {
 
   int getNumCards() const { return NUM_CARDS; }
 
- private:
+ protected:
   void init() const;
 
   void deleteCards();
 
- private:
+ protected:
+  typedef std::map<CCard::Value,CCard *>   ValueCards;
+  typedef std::map<CCard::Suit,ValueCards> SuitValueCards;
+
   typedef std::vector<CCard *> CCardOnList;
   typedef std::list  <CCard *> CCardOffList;
 
-  bool initialized_ { false };
-
-  CCardOnList  cards_on_;
-  CCardOffList cards_off_;
-
-  CImagePtr backImage_;
+  bool           initialized_ { false };
+  SuitValueCards cards_;
+  CCardOnList    cardsOn_;
+  CCardOffList   cardsOff_;
+  CImagePtr      backImage_;
 };
 
 #endif

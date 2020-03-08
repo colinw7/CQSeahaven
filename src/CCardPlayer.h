@@ -22,7 +22,7 @@ class CCardPlayer {
 
   CCard *getCard(int pos) const;
 
- private:
+ protected:
   typedef std::list<CCard *> CCardList;
 
   std::string name_;

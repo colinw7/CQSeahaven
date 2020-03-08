@@ -136,9 +136,7 @@ std::string
 CCard::
 getName() const
 {
-  std::string str;
-
-  CStrUtil::strprintf(&str, "%c%02d", getSuitChar(), int(value_) + 1);
+  std::string str = CStrUtil::strprintf("%c%02d", getSuitChar(), int(value_) + 1);
 
   return str;
 }
