@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'CQSeahaven.ui'
 **
-** Created by: Qt User Interface Compiler version 5.5.1
+** Created by: Qt User Interface Compiler version 5.12.8
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
 ********************************************************************************/
@@ -12,8 +12,6 @@
 #include <QtCore/QVariant>
 #include <QtWidgets/QAction>
 #include <QtWidgets/QApplication>
-#include <QtWidgets/QButtonGroup>
-#include <QtWidgets/QHeaderView>
 #include <QtWidgets/QMainWindow>
 #include <QtWidgets/QMenu>
 #include <QtWidgets/QMenuBar>
@@ -42,18 +40,18 @@ public:
     void setupUi(QMainWindow *CQSeahaven)
     {
         if (CQSeahaven->objectName().isEmpty())
-            CQSeahaven->setObjectName(QStringLiteral("CQSeahaven"));
+            CQSeahaven->setObjectName(QString::fromUtf8("CQSeahaven"));
         CQSeahaven->resize(800, 600);
         action_Quit = new QAction(CQSeahaven);
-        action_Quit->setObjectName(QStringLiteral("action_Quit"));
+        action_Quit->setObjectName(QString::fromUtf8("action_Quit"));
         action_Solve = new QAction(CQSeahaven);
-        action_Solve->setObjectName(QStringLiteral("action_Solve"));
+        action_Solve->setObjectName(QString::fromUtf8("action_Solve"));
         action_Help = new QAction(CQSeahaven);
-        action_Help->setObjectName(QStringLiteral("action_Help"));
+        action_Help->setObjectName(QString::fromUtf8("action_Help"));
         action_New_Game = new QAction(CQSeahaven);
-        action_New_Game->setObjectName(QStringLiteral("action_New_Game"));
+        action_New_Game->setObjectName(QString::fromUtf8("action_New_Game"));
         centralwidget = new QWidget(CQSeahaven);
-        centralwidget->setObjectName(QStringLiteral("centralwidget"));
+        centralwidget->setObjectName(QString::fromUtf8("centralwidget"));
         QSizePolicy sizePolicy(static_cast<QSizePolicy::Policy>(7), static_cast<QSizePolicy::Policy>(7));
         sizePolicy.setHorizontalStretch(0);
         sizePolicy.setVerticalStretch(0);
@@ -62,25 +60,25 @@ public:
         vboxLayout = new QVBoxLayout(centralwidget);
         vboxLayout->setSpacing(0);
         vboxLayout->setContentsMargins(0, 0, 0, 0);
-        vboxLayout->setObjectName(QStringLiteral("vboxLayout"));
+        vboxLayout->setObjectName(QString::fromUtf8("vboxLayout"));
         canvas = new QWidget(centralwidget);
-        canvas->setObjectName(QStringLiteral("canvas"));
+        canvas->setObjectName(QString::fromUtf8("canvas"));
 
         vboxLayout->addWidget(canvas);
 
         CQSeahaven->setCentralWidget(centralwidget);
         menubar = new QMenuBar(CQSeahaven);
-        menubar->setObjectName(QStringLiteral("menubar"));
+        menubar->setObjectName(QString::fromUtf8("menubar"));
         menubar->setGeometry(QRect(0, 0, 800, 33));
         menu_File = new QMenu(menubar);
-        menu_File->setObjectName(QStringLiteral("menu_File"));
+        menu_File->setObjectName(QString::fromUtf8("menu_File"));
         menu_Move = new QMenu(menubar);
-        menu_Move->setObjectName(QStringLiteral("menu_Move"));
+        menu_Move->setObjectName(QString::fromUtf8("menu_Move"));
         menu_Help = new QMenu(menubar);
-        menu_Help->setObjectName(QStringLiteral("menu_Help"));
+        menu_Help->setObjectName(QString::fromUtf8("menu_Help"));
         CQSeahaven->setMenuBar(menubar);
         statusbar = new QStatusBar(CQSeahaven);
-        statusbar->setObjectName(QStringLiteral("statusbar"));
+        statusbar->setObjectName(QString::fromUtf8("statusbar"));
         CQSeahaven->setStatusBar(statusbar);
 
         menubar->addAction(menu_File->menuAction());
@@ -100,18 +98,18 @@ public:
 
     void retranslateUi(QMainWindow *CQSeahaven)
     {
-        CQSeahaven->setWindowTitle(QApplication::translate("CQSeahaven", "MainWindow", 0));
-        action_Quit->setText(QApplication::translate("CQSeahaven", "&Quit", 0));
-        action_Solve->setText(QApplication::translate("CQSeahaven", "&Solve", 0));
-        action_Solve->setIconText(QApplication::translate("CQSeahaven", "Solve", 0));
+        CQSeahaven->setWindowTitle(QApplication::translate("CQSeahaven", "MainWindow", nullptr));
+        action_Quit->setText(QApplication::translate("CQSeahaven", "&Quit", nullptr));
+        action_Solve->setText(QApplication::translate("CQSeahaven", "&Solve", nullptr));
+        action_Solve->setIconText(QApplication::translate("CQSeahaven", "Solve", nullptr));
 #ifndef QT_NO_TOOLTIP
-        action_Solve->setToolTip(QApplication::translate("CQSeahaven", "Solve", 0));
+        action_Solve->setToolTip(QApplication::translate("CQSeahaven", "Solve", nullptr));
 #endif // QT_NO_TOOLTIP
-        action_Help->setText(QApplication::translate("CQSeahaven", "&Help", 0));
-        action_New_Game->setText(QApplication::translate("CQSeahaven", "&New Game", 0));
-        menu_File->setTitle(QApplication::translate("CQSeahaven", "&File", 0));
-        menu_Move->setTitle(QApplication::translate("CQSeahaven", "&Move", 0));
-        menu_Help->setTitle(QApplication::translate("CQSeahaven", "&Help", 0));
+        action_Help->setText(QApplication::translate("CQSeahaven", "&Help", nullptr));
+        action_New_Game->setText(QApplication::translate("CQSeahaven", "&New Game", nullptr));
+        menu_File->setTitle(QApplication::translate("CQSeahaven", "&File", nullptr));
+        menu_Move->setTitle(QApplication::translate("CQSeahaven", "&Move", nullptr));
+        menu_Help->setTitle(QApplication::translate("CQSeahaven", "&Help", nullptr));
     } // retranslateUi
 
 };
