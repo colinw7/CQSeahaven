@@ -43,9 +43,9 @@ class CSeahavenMoveSetSet {
 
   bool isEmpty() const { return (num_move_sets_ == 0); }
 
-  int size() const { return num_move_sets_; }
+  uint size() const { return num_move_sets_; }
 
-  int getNumMoveSets() const { return num_move_sets_; }
+  uint getNumMoveSets() const { return num_move_sets_; }
 
   CSeahavenMoveSet *getMoveSet(int num);
 
@@ -67,7 +67,7 @@ class CSeahavenMoveSetSet {
 
  private:
   MoveSetList move_sets_;
-  int         num_move_sets_ { 0 };
+  uint        num_move_sets_ { 0 };
 };
 
 //---

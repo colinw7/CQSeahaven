@@ -127,15 +127,15 @@ class CSeahaven {
   static bool debug_;
 
   using StateListList = std::vector<StateList>;
-  using NumStates     = std::vector<int>;
+  using NumStates     = std::vector<uint>;
 
   CCardDeck            *deck_           { nullptr };
   CSeahavenStackMgr    *stack_mgr_      { nullptr };
-  int                   num_stacks_     { 0 };
+  uint                  num_stacks_     { 0 };
   CSeahavenPileMgr     *pile_mgr_       { nullptr };
-  int                   num_piles_      { 0 };
+  uint                  num_piles_      { 0 };
   CSeahavenWorkAreaMgr *work_area_mgr_  { nullptr };
-  int                   num_work_areas_ { 0 };
+  uint                  num_work_areas_ { 0 };
   int                   iterations_     { 0 };
   StateListList         states_;
   NumStates             num_states_;

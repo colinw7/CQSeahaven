@@ -16,7 +16,7 @@ CSeahavenPileMgr()
 CSeahavenPileMgr::
 ~CSeahavenPileMgr()
 {
-  for (int i = 0; i < NUM_PILES; i++)
+  for (uint i = 0; i < NUM_PILES; i++)
     delete piles_[i];
 }
 
@@ -40,7 +40,7 @@ void
 CSeahavenPileMgr::
 clearPiles()
 {
-  for (int i = 0; i < NUM_PILES; i++)
+  for (uint i = 0; i < NUM_PILES; i++)
     piles_[i]->clear();
 }
 
@@ -48,7 +48,7 @@ bool
 CSeahavenPileMgr::
 isSolved() const
 {
-  for (int i = 0; i < NUM_PILES; i++)
+  for (uint i = 0; i < NUM_PILES; i++)
     if (! piles_[i]->isSolved())
       return false;
 
@@ -59,7 +59,7 @@ void
 CSeahavenPileMgr::
 print(std::ostream &os) const
 {
-  for (int i = 0; i < NUM_PILES; i++) {
+  for (uint i = 0; i < NUM_PILES; i++) {
     CStrUtil::fprintf(os, "Pile %02d) ", i + 1);
 
     os << *piles_[i] << std::endl;
@@ -137,9 +137,9 @@ CCard *
 CSeahavenPile::
 peek(int i)
 {
-  assert(i >= 0 && i < num_cards_);
+  assert(i >= 0 && i < int(num_cards_));
 
-  return cards_[i];
+  return cards_[uint(i)];
 }
 
 void

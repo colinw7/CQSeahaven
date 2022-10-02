@@ -21,7 +21,7 @@ class CSeahavenStackMgr {
 
   void clearStacks();
 
-  int getNumStacks() const;
+  uint getNumStacks() const;
 
   void print(std::ostream &os) const;
 
@@ -42,18 +42,18 @@ class CSeahavenStack {
   CSeahavenStack(int num);
  ~CSeahavenStack();
 
-  int getNumCards() const { return num_cards_; }
+  uint getNumCards() const { return num_cards_; }
 
   bool isEmpty() const { return (num_cards_ == 0); }
 
-  int  getNumConsecutive() { return num_consecutive_; }
+  uint getNumConsecutive() { return num_consecutive_; }
 
   bool isKingStack() const { return king_stack_; }
   bool isForceMoveStack() const { return force_move_stack_; }
 
   void getTopCards(std::vector<CCard *> &cards) const;
 
-  int getNumTopCards() const;
+  uint getNumTopCards() const;
 
   CCard *getTopCard() const;
 
@@ -71,8 +71,8 @@ class CSeahavenStack {
  private:
   int      num_;
   CardList cards_;
-  int      num_cards_;
-  int      num_consecutive_;
+  uint     num_cards_;
+  uint     num_consecutive_;
   bool     king_stack_;
   bool     force_move_stack_;
 };

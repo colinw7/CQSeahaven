@@ -40,9 +40,9 @@ CSeahavenMoveSet *
 CSeahavenMoveSetSet::
 getMoveSet(int num)
 {
-  assert(num >= 0 && num < num_move_sets_);
+  assert(num >= 0 && num < int(num_move_sets_));
 
-  return move_sets_[num];
+  return move_sets_[uint(num)];
 }
 
 CSeahavenMoveSet *

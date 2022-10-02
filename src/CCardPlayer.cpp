@@ -29,14 +29,14 @@ int
 CCardPlayer::
 getNumCards() const
 {
-  return cards_.size();
+  return int(cards_.size());
 }
 
 CCard *
 CCardPlayer::
 getCard(int pos) const
 {
-  if (pos < 0 || pos >= (int) cards_.size())
+  if (pos < 0 || pos >= int(cards_.size()))
     return nullptr;
 
   int i = 0;

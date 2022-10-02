@@ -19,7 +19,7 @@ class CSeahavenPileMgr {
   CSeahavenPileMgr();
  ~CSeahavenPileMgr();
 
-  int getNumPiles() const { return NUM_PILES; }
+  uint getNumPiles() const { return NUM_PILES; }
 
   CSeahavenPile *getPile(CCard::Suit suit);
   CSeahavenPile *getPile(int num);
@@ -44,7 +44,7 @@ class CSeahavenPile {
 
   bool isEmpty() const { return (num_cards_ == 0); }
 
-  int getNumCards() const { return num_cards_; }
+  uint getNumCards() const { return num_cards_; }
 
   bool isSolved() const { return solved_; }
 
@@ -64,7 +64,7 @@ class CSeahavenPile {
 
   CCard::Suit suit_;
   CardList    cards_;
-  int         num_cards_ { 0 };
+  uint        num_cards_ { 0 };
   bool        solved_ { false };
 };
 

@@ -31,8 +31,8 @@ CSeahaven()
   states_    .resize(NUM_STATE_LISTS);
   num_states_.resize(NUM_STATE_LISTS);
 
-  for (int i = 0; i < NUM_STATE_LISTS; ++i)
-    num_states_[i] =  0;
+  for (uint i = 0; i < NUM_STATE_LISTS; ++i)
+    num_states_[i] = 0;
 
   deal();
 }
@@ -53,8 +53,8 @@ void
 CSeahaven::
 deleteStates()
 {
-  for (int i = 0; i < NUM_STATE_LISTS; ++i) {
-    for (int j = 0; j < num_states_[i]; ++j)
+  for (uint i = 0; i < NUM_STATE_LISTS; ++i) {
+    for (uint j = 0; j < num_states_[i]; ++j)
       delete states_[i][j];
 
     states_[i].clear();
@@ -80,12 +80,12 @@ deal()
   pile_mgr_     ->clearPiles    ();
   work_area_mgr_->clearWorkAreas();
 
-  int num_cards = deck_->getNumCards();
+  auto num_cards = deck_->getNumCards();
 
-  int num_stack_cards = num_cards/num_stacks_;
+  auto num_stack_cards = num_cards/int(num_stacks_);
 
-  for (int i = 0; i < num_stacks_; ++i) {
-    CSeahavenStack *stack = stack_mgr_->getStack(i);
+  for (uint i = 0; i < num_stacks_; ++i) {
+    CSeahavenStack *stack = stack_mgr_->getStack(int(i));
 
     for (int j = 0; j < num_stack_cards; ++j) {
       CCard *card = deck_->popCard();
@@ -96,7 +96,7 @@ deal()
     }
   }
 
-  int num_extra_cards = num_cards - num_stack_cards*num_stacks_;
+  int num_extra_cards = num_cards - num_stack_cards*int(num_stacks_);
 
   for (int i = 0; i < num_extra_cards; ++i) {
     CSeahavenWorkArea *work_area = work_area_mgr_->getFreeWorkArea();
@@ -321,10 +321,10 @@ processMoves(CSeahavenMoveSetSet &move_set_set, int depth)
       std::cout << "No Moves" << std::endl;
   }
 
-  int move_set_set1_size = move_set_set1.size();
+  auto move_set_set1_size = move_set_set1.size();
 
-  for (int i = 0; i < move_set_set1_size; ++i) {
-    CSeahavenMoveSet *move_set1 = move_set_set1.getMoveSet(i);
+  for (uint i = 0; i < move_set_set1_size; ++i) {
+    CSeahavenMoveSet *move_set1 = move_set_set1.getMoveSet(int(i));
 
     if (getDebug())
       std::cout << "Do Move: " << *move_set1 << std::endl;
@@ -379,16 +379,16 @@ getForcedStackMoveSet(CSeahavenMoveSet &move_set, bool &unsolvable)
 {
   unsolvable = false;
 
-  int num_empty_work_areas = work_area_mgr_->getNumEmpty();
+  auto num_empty_work_areas = work_area_mgr_->getNumEmpty();
 
-  for (int i = 0; i < num_stacks_; ++i) {
-    CSeahavenStack *stack1 = stack_mgr_->getStack(i);
+  for (uint i = 0; i < num_stacks_; ++i) {
+    CSeahavenStack *stack1 = stack_mgr_->getStack(int(i));
 
     if (! stack1->isForceMoveStack())
       continue;
 
-    for (int j = i + 1; j < num_stacks_; ++j) {
-      CSeahavenStack *stack2 = stack_mgr_->getStack(j);
+    for (uint j = i + 1; j < num_stacks_; ++j) {
+      CSeahavenStack *stack2 = stack_mgr_->getStack(int(j));
 
       if (! stack2->isForceMoveStack())
         continue;
@@ -407,8 +407,8 @@ getForcedStackMoveSet(CSeahavenMoveSet &move_set, bool &unsolvable)
     }
   }
 
-  for (int i = 0; i < num_stacks_; ++i) {
-    CSeahavenStack *stack1 = stack_mgr_->getStack(i);
+  for (uint i = 0; i < num_stacks_; ++i) {
+    CSeahavenStack *stack1 = stack_mgr_->getStack(int(i));
 
     if (stack1->isEmpty())
       continue;
@@ -416,21 +416,21 @@ getForcedStackMoveSet(CSeahavenMoveSet &move_set, bool &unsolvable)
     CCard *stack_card1 = stack1->peek(-1);
 
     if (stack1->isForceMoveStack()) {
-      for (int j = 0; j < num_stacks_; ++j) {
+      for (uint j = 0; j < num_stacks_; ++j) {
         if (i == j)
           continue;
 
-        CSeahavenStack *stack2 = stack_mgr_->getStack(j);
+        CSeahavenStack *stack2 = stack_mgr_->getStack(int(j));
 
         if (stack2->isEmpty())
           continue;
 
-        int num_consecutive2 = stack2->getNumConsecutive();
+        int num_consecutive2 = int(stack2->getNumConsecutive());
 
         CCard *stack2_top_card = stack2->peek(-num_consecutive2);
 
         if (stack2_top_card->isNextCard(stack_card1)) {
-          if (num_consecutive2 - 1 > num_empty_work_areas) {
+          if (num_consecutive2 - 1 > int(num_empty_work_areas)) {
             unsolvable = true;
 
             return false;
@@ -443,20 +443,18 @@ getForcedStackMoveSet(CSeahavenMoveSet &move_set, bool &unsolvable)
       }
     }
 
-    for (int j = 0; j < num_work_areas_; ++j) {
+    for (uint j = 0; j < num_work_areas_; ++j) {
       std::vector<CSeahavenWorkArea *> work_areas;
 
-      work_area_mgr_->getTopCards(j, work_areas);
+      work_area_mgr_->getTopCards(int(j), work_areas);
 
-      int num_cards = work_areas.size();
-
-      if (num_cards == 0)
-        continue;
+      auto num_cards = work_areas.size();
+      if (num_cards == 0) continue;
 
       CCard *work_area_card = work_areas[0]->peek();
 
       if (work_area_card->isNextCard(stack_card1)) {
-        addWorkToStack(&move_set, work_areas, stack1, num_cards);
+        addWorkToStack(&move_set, work_areas, stack1, int(num_cards));
 
         return true;
       }
@@ -470,13 +468,13 @@ bool
 CSeahaven::
 getForcedPileMoveSet(CSeahavenMoveSet &move_set)
 {
-  for (int i = 0; i < num_stacks_; ++i) {
-    CSeahavenStack *stack1 = stack_mgr_->getStack(i);
+  for (uint i = 0; i < num_stacks_; ++i) {
+    CSeahavenStack *stack1 = stack_mgr_->getStack(int(i));
 
     if (stack1->isEmpty())
       continue;
 
-    int num_consecutive1 = stack1->getNumConsecutive();
+    auto num_consecutive1 = stack1->getNumConsecutive();
 
     //------
 
@@ -486,7 +484,7 @@ getForcedPileMoveSet(CSeahavenMoveSet &move_set)
 
     if (pile->isEmpty()) {
       if (stack_card1->isAce()) {
-        addStackToPile(&move_set, stack1, pile, num_consecutive1);
+        addStackToPile(&move_set, stack1, pile, int(num_consecutive1));
 
         return true;
       }
@@ -495,7 +493,7 @@ getForcedPileMoveSet(CSeahavenMoveSet &move_set)
       CCard *pile_card = pile->peek();
 
       if (pile_card->isNextCard(stack_card1)) {
-        addStackToPile(&move_set, stack1, pile, num_consecutive1);
+        addStackToPile(&move_set, stack1, pile, int(num_consecutive1));
 
         return true;
       }
@@ -504,13 +502,13 @@ getForcedPileMoveSet(CSeahavenMoveSet &move_set)
 
   //------
 
-  for (int i = 0; i < num_work_areas_; ++i) {
-    CCard *work_area_card = work_area_mgr_->getCard(i);
+  for (uint i = 0; i < num_work_areas_; ++i) {
+    CCard *work_area_card = work_area_mgr_->getCard(int(i));
 
     if (! work_area_card)
       continue;
 
-    CSeahavenWorkArea *work_area = work_area_mgr_->getWorkArea(i);
+    CSeahavenWorkArea *work_area = work_area_mgr_->getWorkArea(int(i));
 
     CSeahavenPile *pile = pile_mgr_->getPile(work_area_card->getSuit());
 
@@ -539,16 +537,16 @@ bool
 CSeahaven::
 stacksLockEachOther(CSeahavenStack *stack1, CSeahavenStack *stack2)
 {
-  int num_consecutive1 = stack1->getNumConsecutive();
-  int num_consecutive2 = stack2->getNumConsecutive();
+  auto num_consecutive1 = stack1->getNumConsecutive();
+  auto num_consecutive2 = stack2->getNumConsecutive();
 
-  int num_non_consecutive1 = stack1->getNumCards() - num_consecutive1;
-  int num_non_consecutive2 = stack2->getNumCards() - num_consecutive2;
+  auto num_non_consecutive1 = stack1->getNumCards() - num_consecutive1;
+  auto num_non_consecutive2 = stack2->getNumCards() - num_consecutive2;
 
   CCard *card2 = stack2->peek(-1);
 
-  for (int i = 0; i < num_non_consecutive1; ++i) {
-    CCard *card1 = stack1->peek(i);
+  for (uint i = 0; i < num_non_consecutive1; ++i) {
+    CCard *card1 = stack1->peek(int(i));
 
     if (! card1->isSameSuit(card2))
       continue;
@@ -559,8 +557,8 @@ stacksLockEachOther(CSeahavenStack *stack1, CSeahavenStack *stack2)
 
   CCard *card1 = stack1->peek(-1);
 
-  for (int i = 0; i < num_non_consecutive2; ++i) {
-    CCard *card3 = stack2->peek(i);
+  for (uint i = 0; i < num_non_consecutive2; ++i) {
+    CCard *card3 = stack2->peek(int(i));
 
     if (! card3->isSameSuit(card1))
       continue;
@@ -585,26 +583,26 @@ void
 CSeahaven::
 getStackToStackMoves(CSeahavenMoveSetSet &move_set_set)
 {
-  int num_empty_work_areas = work_area_mgr_->getNumEmpty();
+  auto num_empty_work_areas = work_area_mgr_->getNumEmpty();
 
-  for (int i = 0; i < num_stacks_; ++i) {
-    CSeahavenStack *stack1 = stack_mgr_->getStack(i);
+  for (uint i = 0; i < num_stacks_; ++i) {
+    CSeahavenStack *stack1 = stack_mgr_->getStack(int(i));
 
     if (stack1->isEmpty())
       continue;
 
-    int num_consecutive = stack1->getNumConsecutive();
+    int num_consecutive = int(stack1->getNumConsecutive());
 
     CCard *stack1_top_card = stack1->peek(-num_consecutive);
 
-    if (num_consecutive - 1 <= num_empty_work_areas) {
-      int j = 0;
+    if (num_consecutive - 1 <= int(num_empty_work_areas)) {
+      uint j = 0;
 
       for ( ; j < num_stacks_; ++j) {
         if (i == j)
           continue;
 
-        CSeahavenStack *stack2 = stack_mgr_->getStack(j);
+        CSeahavenStack *stack2 = stack_mgr_->getStack(int(j));
 
         if (stack2->isEmpty()) {
           if (stack1_top_card->isKing()) {
@@ -636,15 +634,15 @@ void
 CSeahaven::
 getStackToWorkMoves(CSeahavenMoveSetSet &move_set_set)
 {
-  int num_empty_work_areas = work_area_mgr_->getNumEmpty();
+  auto num_empty_work_areas = work_area_mgr_->getNumEmpty();
 
-  for (int i = 0; i < num_stacks_; ++i) {
-    CSeahavenStack *stack1 = stack_mgr_->getStack(i);
+  for (uint i = 0; i < num_stacks_; ++i) {
+    CSeahavenStack *stack1 = stack_mgr_->getStack(int(i));
 
     if (stack1->isEmpty())
       continue;
 
-    int num_consecutive = stack1->getNumConsecutive();
+    auto num_consecutive = stack1->getNumConsecutive();
 
 /*
     CCard *stack1_top_card = stack1->peek(-num_consecutive);
@@ -655,7 +653,7 @@ getStackToWorkMoves(CSeahavenMoveSetSet &move_set_set)
     if (num_consecutive <= num_empty_work_areas) {
       CSeahavenMoveSet move_set;
 
-      addStackToWork(&move_set, stack1, num_consecutive);
+      addStackToWork(&move_set, stack1, int(num_consecutive));
 
 /*
       if (stack1_top_card->isKing()) {
@@ -690,24 +688,22 @@ void
 CSeahaven::
 getWorkToStackMoves(CSeahavenMoveSetSet &move_set_set)
 {
-  for (int i = 0; i < num_work_areas_; ++i) {
+  for (uint i = 0; i < num_work_areas_; ++i) {
     std::vector<CSeahavenWorkArea *> work_areas;
 
-    work_area_mgr_->getTopCards(i, work_areas);
+    work_area_mgr_->getTopCards(int(i), work_areas);
 
-    int num_cards = work_areas.size();
-
-    if (num_cards == 0)
-      continue;
+    auto num_cards = work_areas.size();
+    if (num_cards == 0) continue;
 
     CCard *work_area_card = work_areas[0]->peek();
 
-    for (int ii = 0; ii < num_stacks_; ++ii) {
-      CSeahavenStack *stack = stack_mgr_->getStack(ii);
+    for (uint ii = 0; ii < num_stacks_; ++ii) {
+      CSeahavenStack *stack = stack_mgr_->getStack(int(ii));
 
       if (stack->isEmpty()) {
         if (work_area_card->isKing()) {
-          moveWorkToStack(move_set_set, work_areas, stack, num_cards);
+          moveWorkToStack(move_set_set, work_areas, stack, int(num_cards));
           break; // No need to look any further
         }
       }
@@ -715,7 +711,7 @@ getWorkToStackMoves(CSeahavenMoveSetSet &move_set_set)
         CCard *stack_card = stack->peek();
 
         if (work_area_card->isNextCard(stack_card)) {
-          moveWorkToStack(move_set_set, work_areas, stack, num_cards);
+          moveWorkToStack(move_set_set, work_areas, stack, int(num_cards));
           break; // No need to look any further
         }
       }
@@ -749,7 +745,7 @@ moveStackToStackValid(CSeahavenStack *stack1, CSeahavenStack *stack2) const
   if (stack1->isEmpty())
     return false;
 
-  int num_top_cards = stack1->getNumTopCards();
+  auto num_top_cards = stack1->getNumTopCards();
 
   if (work_area_mgr_->getNumEmpty() < num_top_cards - 1)
     return false;
@@ -777,7 +773,7 @@ moveStackToWorkAreaValid(CSeahavenStack *stack) const
   if (stack->isEmpty())
     return false;
 
-  int num_top_cards = stack->getNumTopCards();
+  auto num_top_cards = stack->getNumTopCards();
 
   if (work_area_mgr_->getNumEmpty() >= num_top_cards)
     return true;
@@ -904,7 +900,7 @@ moveWorkToPile(CSeahavenMoveSetSet &move_set_set, std::vector<CSeahavenWorkArea 
 {
   CSeahavenMoveSet *move_set = move_set_set.addMoveSet();
 
-  for (int i = 0; i < num; ++i)
+  for (uint i = 0; i < uint(num); ++i)
     addWorkToPile(move_set, work_areas[i], pile);
 }
 
@@ -927,13 +923,13 @@ addStackToStack(CSeahavenMoveSet *move_set, CSeahavenStack *stack1,
 
   work_area_mgr_->getEmptyWorkAreas(work_areas);
 
-  for (int i = 0; i < num - 1; ++i)
+  for (uint i = 0; i < uint(num - 1); ++i)
     move_set->addMove(stack1, work_areas[i]);
 
   move_set->addMove(stack1, stack2);
 
   for (int i = num - 2; i >= 0; --i)
-    move_set->addMove(work_areas[i], stack2);
+    move_set->addMove(work_areas[uint(i)], stack2);
 }
 
 void
@@ -953,7 +949,7 @@ addStackToWork(CSeahavenMoveSet *move_set, CSeahavenStack *stack, int num)
 
   work_area_mgr_->getEmptyWorkAreas(work_areas);
 
-  for (int i = 0; i < num; ++i)
+  for (uint i = 0; i < uint(num); ++i)
     move_set->addMove(stack, work_areas[i]);
 }
 
@@ -970,7 +966,7 @@ addWorkToStack(CSeahavenMoveSet *move_set, std::vector<CSeahavenWorkArea *> work
                CSeahavenStack *stack, int num)
 {
   for (int i = 0; i < num; ++i)
-    move_set->addMove(work_areas[i], stack);
+    move_set->addMove(work_areas[uint(i)], stack);
 }
 
 void
@@ -984,30 +980,13 @@ void
 CSeahaven::
 save(CFile &file)
 {
-  for (int i = 0; i < num_stacks_; ++i) {
-    CSeahavenStack *stack = stack_mgr_->getStack(i);
+  for (uint i = 0; i < num_stacks_; ++i) {
+    CSeahavenStack *stack = stack_mgr_->getStack(int(i));
 
-    int num_cards = stack->getNumCards();
+    auto num_cards = stack->getNumCards();
 
-    for (int j = 0; j < num_cards; ++j) {
-      CCard *card = stack->peek(j);
-
-      if (j > 0)
-        file.printf(" ");
-
-      file.printf("%s", card->getName().c_str());
-    }
-
-    file.printf("\n");
-  }
-
-  for (int i = 0; i < num_piles_; ++i) {
-    CSeahavenPile *pile = pile_mgr_->getPile(i);
-
-    int num_cards = pile->getNumCards();
-
-    for (int j = 0; j < num_cards; ++j) {
-      CCard *card = pile->peek(j);
+    for (uint j = 0; j < num_cards; ++j) {
+      CCard *card = stack->peek(int(j));
 
       if (j > 0)
         file.printf(" ");
@@ -1018,8 +997,25 @@ save(CFile &file)
     file.printf("\n");
   }
 
-  for (int i = 0; i < num_work_areas_; ++i) {
-    CCard *card = work_area_mgr_->getCard(i);
+  for (uint i = 0; i < num_piles_; ++i) {
+    CSeahavenPile *pile = pile_mgr_->getPile(int(i));
+
+    auto num_cards = pile->getNumCards();
+
+    for (uint j = 0; j < num_cards; ++j) {
+      CCard *card = pile->peek(int(j));
+
+      if (j > 0)
+        file.printf(" ");
+
+      file.printf("%s", card->getName().c_str());
+    }
+
+    file.printf("\n");
+  }
+
+  for (uint i = 0; i < num_work_areas_; ++i) {
+    CCard *card = work_area_mgr_->getCard(int(i));
 
     if (i > 0)
       file.printf(" ");
@@ -1045,19 +1041,19 @@ restore(CFile &file)
 
   std::string line;
 
-  for (int i = 0; i < num_stacks_; ++i) {
+  for (uint i = 0; i < num_stacks_; ++i) {
     if (! file.readLine(line))
       throw "Bad File";
 
-    CSeahavenStack *stack = stack_mgr_->getStack(i);
+    CSeahavenStack *stack = stack_mgr_->getStack(int(i));
 
     std::vector<std::string> words;
 
     CStrUtil::addWords(line, words);
 
-    int num_words = words.size();
+    auto num_words = words.size();
 
-    for (int j = 0; j < num_words; ++j) {
+    for (uint j = 0; j < num_words; ++j) {
       if (words[j].size() < 1)
         throw "Bad File";
 
@@ -1069,27 +1065,27 @@ restore(CFile &file)
       if (! CStrUtil::isInteger(value_str))
         throw "Bad File";
 
-      int value = CStrUtil::toInteger(value_str);
+      int value = int(CStrUtil::toInteger(value_str));
 
-      CCard *card = deck_->undealCard(suit, (CCard::Value) (value - 1));
+      CCard *card = deck_->undealCard(suit, CCard::Value(value - 1));
 
       stack->push(card);
     }
   }
 
-  for (int i = 0; i < num_piles_; ++i) {
+  for (uint i = 0; i < num_piles_; ++i) {
     if (! file.readLine(line))
       throw "Bad File";
 
-    CSeahavenPile *pile = pile_mgr_->getPile(i);
+    CSeahavenPile *pile = pile_mgr_->getPile(int(i));
 
     std::vector<std::string> words;
 
     CStrUtil::addWords(line, words);
 
-    int num_words = words.size();
+    auto num_words = words.size();
 
-    for (int j = 0; j < num_words; ++j) {
+    for (uint j = 0; j < num_words; ++j) {
       if (words[j].size() < 1)
         throw "Bad File";
 
@@ -1101,9 +1097,9 @@ restore(CFile &file)
       if (! CStrUtil::isInteger(value_str))
         throw "Bad File";
 
-      int value = CStrUtil::toInteger(value_str);
+      int value = int(CStrUtil::toInteger(value_str));
 
-      CCard *card = deck_->undealCard(suit, (CCard::Value) (value - 1));
+      CCard *card = deck_->undealCard(suit, CCard::Value(value - 1));
 
       pile->push(card);
     }
@@ -1116,17 +1112,17 @@ restore(CFile &file)
 
   CStrUtil::addWords(line, words);
 
-  int num_words = words.size();
+  auto num_words = words.size();
 
-  if (num_words != num_work_areas_)
+  if (uint(num_words) != num_work_areas_)
     throw "Bad File";
 
-  for (int i = 0; i < num_work_areas_; ++i) {
+  for (uint i = 0; i < num_work_areas_; ++i) {
     if (words[i].size() < 1)
       throw "Bad File";
 
     if (words[i] != "---") {
-      CSeahavenWorkArea *work_area = work_area_mgr_->getWorkArea(i);
+      CSeahavenWorkArea *work_area = work_area_mgr_->getWorkArea(int(i));
 
       char        suit_char = words[i][0];
       std::string value_str = words[i].substr(1);
@@ -1136,9 +1132,9 @@ restore(CFile &file)
       if (! CStrUtil::isInteger(value_str))
         throw "Bad File";
 
-      int value = CStrUtil::toInteger(value_str);
+      int value = int(CStrUtil::toInteger(value_str));
 
-      CCard *card = deck_->undealCard(suit, (CCard::Value) (value - 1));
+      CCard *card = deck_->undealCard(suit, CCard::Value(value - 1));
 
       work_area->push(card);
     }
@@ -1151,11 +1147,11 @@ bool
 CSeahaven::
 checkState()
 {
-  CSeahavenState *state = new CSeahavenState(stack_mgr_, num_stacks_);
+  CSeahavenState *state = new CSeahavenState(stack_mgr_, int(num_stacks_));
 
-  int key = state->getKey() % NUM_STATE_LISTS;
+  auto key = uint(state->getKey() % NUM_STATE_LISTS);
 
-  for (int i = 0; i < num_states_[key]; ++i) {
+  for (uint i = 0; i < num_states_[key]; ++i) {
     if (*states_[key][i] == *state) {
       delete state;
 
@@ -1197,16 +1193,16 @@ CSeahavenState(CSeahavenStackMgr *stack_mgr, int num_stacks)
   for (int i = 0; i < num_stacks; ++i) {
     CSeahavenStack *stack = stack_mgr->getStack(i);
 
-    int num_cards = stack->getNumCards();
+    auto num_cards = stack->getNumCards();
 
     int k1 = k;
 
-    for (int j = 0; j < num_cards; ++j) {
-      CCard *card = stack->peek(j);
+    for (uint j = 0; j < num_cards; ++j) {
+      CCard *card = stack->peek(int(j));
 
       int ind = card->getIndex();
 
-      c_[k1++] = ind;
+      c_[uint(k1++)] = char(ind);
 
       key_ ^= ind;
     }

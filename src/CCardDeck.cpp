@@ -36,8 +36,8 @@ init() const
     th->initialized_ = true;
 
     for (int i = 0; i < NUM_CARDS; i++) {
-      CCard::Suit  suit  = (CCard::Suit ) (i / 13);
-      CCard::Value value = (CCard::Value) (i % 13);
+      CCard::Suit  suit  = CCard::Suit (i / 13);
+      CCard::Value value = CCard::Value(i % 13);
 
       CCard *card = th->createCard(suit, value);
 
@@ -128,8 +128,8 @@ restore(CFile &file)
     if (! CStrUtil::isInteger(value_str))
       throw "Bad CCardDeck File";
 
-    int isuit  = (strchr(suit_chars, suit_char) - suit_chars);
-    int ivalue = CStrUtil::toInteger(value_str) - 1;
+    int isuit  = int(strchr(suit_chars, suit_char) - &suit_chars[0]);
+    int ivalue = int(CStrUtil::toInteger(value_str) - 1);
 
     if (isuit < 0 || isuit > 4)
       throw "Bad CCardDeck File";
@@ -137,8 +137,8 @@ restore(CFile &file)
     if (ivalue < 0 || ivalue > 13)
       throw "Bad CCardDeck File";
 
-    CCard::Suit  suit  = (CCard::Suit ) isuit;
-    CCard::Value value = (CCard::Value) ivalue;
+    CCard::Suit  suit  = CCard::Suit (isuit);
+    CCard::Value value = CCard::Value(ivalue);
 
     CCard *card = createCard(suit, value);
 
@@ -163,7 +163,7 @@ shuffle()
     while (card1 == card2)
       card2 = randCard();
 
-    std::swap(cardsOn_[card1], cardsOn_[card2]);
+    std::swap(cardsOn_[uint(card1)], cardsOn_[uint(card2)]);
   }
 }
 
@@ -219,10 +219,10 @@ peekCard(int pos) const
 {
   init();
 
-  if (pos < 0 || pos >= (int) cardsOn_.size())
+  if (pos < 0 || pos >= int(cardsOn_.size()))
     return nullptr;
 
-  return cardsOn_[pos];
+  return cardsOn_[uint(pos)];
 }
 
 void
@@ -272,9 +272,9 @@ getCardHeight() const
 static int
 randCard()
 {
-  long r = COSRand::rand();
+  auto r = COSRand::rand();
 
-  int card = r % CCardDeck::NUM_CARDS;
+  int card = int(r % CCardDeck::NUM_CARDS);
 
   return card;
 }

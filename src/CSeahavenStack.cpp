@@ -10,14 +10,14 @@ static const int NUM_STACKS = 10;
 CSeahavenStackMgr::
 CSeahavenStackMgr()
 {
-  for (int i = 0; i < NUM_STACKS; ++i)
-    stacks_.push_back(new CSeahavenStack(i));
+  for (uint i = 0; i < NUM_STACKS; ++i)
+    stacks_.push_back(new CSeahavenStack(int(i)));
 }
 
 CSeahavenStackMgr::
 ~CSeahavenStackMgr()
 {
-  for (int i = 0; i < NUM_STACKS; i++)
+  for (uint i = 0; i < NUM_STACKS; i++)
     delete stacks_[i];
 }
 
@@ -27,18 +27,18 @@ getStack(int num)
 {
   assert(num >= 0 && num < NUM_STACKS);
 
-  return stacks_[num];
+  return stacks_[uint(num)];
 }
 
 void
 CSeahavenStackMgr::
 clearStacks()
 {
-  for (int i = 0; i < NUM_STACKS; i++)
+  for (uint i = 0; i < NUM_STACKS; i++)
     stacks_[i]->clear();
 }
 
-int
+uint
 CSeahavenStackMgr::
 getNumStacks() const
 {
@@ -49,7 +49,7 @@ void
 CSeahavenStackMgr::
 print(std::ostream &os) const
 {
-  for (int i = 0; i < NUM_STACKS; i++) {
+  for (uint i = 0; i < NUM_STACKS; i++) {
     CStrUtil::fprintf(os, "Stack %02d) ", i + 1);
 
     os << *stacks_[i] << std::endl;
@@ -82,7 +82,7 @@ getTopCards(std::vector<CCard *> &cards) const
   if (num_cards_ == 0)
     return;
 
-  int i = num_cards_ - 1;
+  int i = int(num_cards_ - 1);
 
   CCard *card1 = cards_[i--];
 
@@ -100,16 +100,16 @@ getTopCards(std::vector<CCard *> &cards) const
   }
 }
 
-int
+uint
 CSeahavenStack::
 getNumTopCards() const
 {
-  int num_top_cards = 0;
+  uint num_top_cards = 0;
 
   if (num_cards_ == 0)
     return num_top_cards;
 
-  int i = num_cards_ - 1;
+  int i = int(num_cards_ - 1);
 
   CCard *card1 = cards_[i--];
 
@@ -136,7 +136,7 @@ getTopCard() const
   if (num_cards_ == 0)
     return nullptr;
 
-  return cards_[num_cards_ - num_consecutive_];
+  return cards_[uint(num_cards_ - num_consecutive_)];
 }
 
 void
@@ -220,9 +220,9 @@ peek(int i)
   if (i < 0)
     i += num_cards_;
 
-  assert(i >= 0 && i < num_cards_);
+  assert(i >= 0 && i < int(num_cards_));
 
-  return cards_[i];
+  return cards_[uint(i)];
 }
 
 void

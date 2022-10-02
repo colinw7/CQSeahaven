@@ -18,12 +18,12 @@ class CSeahavenWorkAreaMgr {
   CSeahavenWorkAreaMgr();
  ~CSeahavenWorkAreaMgr();
 
-  int getNumWorkAreas() const { return NUM_WORK_AREAS; }
+  uint getNumWorkAreas() const { return NUM_WORK_AREAS; }
 
   CCard             *getCard(int num);
   CSeahavenWorkArea *getWorkArea(int num);
   CSeahavenWorkArea *getFreeWorkArea();
-  int                getNumEmpty() { return num_empty_; }
+  uint               getNumEmpty() { return num_empty_; }
 
   void getEmptyWorkAreas(std::vector<CSeahavenWorkArea *> &work_areas);
 
@@ -44,7 +44,7 @@ class CSeahavenWorkAreaMgr {
  private:
   CCard             *cards_[NUM_WORK_AREAS];
   CSeahavenWorkArea *work_areas_[NUM_WORK_AREAS];
-  int                num_empty_;
+  uint               num_empty_;
 };
 
 class CSeahavenWorkArea {
