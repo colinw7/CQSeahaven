@@ -25,7 +25,7 @@ class CQDragWindow : public QWidget {
   CQDragWindow(CQSeahavenCanvas *canvas);
  ~CQDragWindow();
 
-  void paintEvent(QPaintEvent *event);
+  void paintEvent(QPaintEvent *event) override;
 };
 
 CQSeahavenCanvas::
