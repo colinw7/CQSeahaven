@@ -222,7 +222,7 @@ drawCard(CCard *card, int x, int y)
 {
   int ind = card->getIndex();
 
-  if (! card_images_[ind].isValid()) {
+  if (! card_images_[ind]) {
     card_images_[ind] = card->getImage();
 
     card_images_[ind]->convertToRGB();

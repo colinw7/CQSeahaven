@@ -35,7 +35,7 @@ CImagePtr
 CCard::
 getImage() const
 {
-  if (! image_.isValid()) {
+  if (! image_) {
     CCard *th = const_cast<CCard *>(this);
 
     CImageNameSrc src("CCard/" + CStrUtil::toString(index_));

@@ -65,7 +65,7 @@ CImagePtr
 CCardDeck::
 getBackImage() const
 {
-  if (! backImage_.isValid()) {
+  if (! backImage_) {
     CCardDeck *th = const_cast<CCardDeck *>(this);
 
     CImageNameSrc src("CCardDeck/back");
